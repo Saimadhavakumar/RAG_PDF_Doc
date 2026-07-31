@@ -25,6 +25,18 @@ st.set_page_config(
 # Dark Mode & Modern CSS Styling
 CUSTOM_CSS = """
 <style>
+    /* Hide Streamlit Header, Main Menu (Hamburger), GitHub icon, Toolbar, & Footer */
+    #MainMenu {visibility: hidden;}
+    header {visibility: hidden; display: none !important;}
+    footer {visibility: hidden; display: none !important;}
+    .stAppHeader {display: none !important;}
+    div[data-testid="stHeader"] {display: none !important;}
+    div[data-testid="stToolbar"] {display: none !important;}
+    div[data-testid="stDecoration"] {display: none !important;}
+    div[data-testid="stStatusWidget"] {display: none !important;}
+    button[title="View code"] {display: none !important;}
+    a[href*="github.com"] {display: none !important;}
+
     /* Dark glassmorphism & accent theme */
     .stApp {
         background-color: #0e1117;

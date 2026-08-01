@@ -53,13 +53,56 @@ CUSTOM_CSS = """
     header[data-testid="stHeader"], div[data-testid="stHeader"] {
         background: transparent !important;
     }
+    /* ChatGPT-Style Movable Sidebar Toggle (When Collapsed) */
     div[data-testid="collapsedControl"] {
-        background-color: #1e293b !important;
-        border: 1px solid rgba(255, 255, 255, 0.2) !important;
-        border-radius: 8px !important;
-        color: #6366f1 !important;
+        position: fixed !important;
+        top: 14px !important;
+        left: 14px !important;
         z-index: 999999 !important;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3) !important;
+        background: rgba(30, 41, 59, 0.9) !important;
+        backdrop-filter: blur(12px) !important;
+        -webkit-backdrop-filter: blur(12px) !important;
+        border: 1px solid rgba(99, 102, 241, 0.4) !important;
+        border-radius: 10px !important;
+        padding: 6px 10px !important;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), 0 0 12px rgba(99, 102, 241, 0.25) !important;
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        cursor: pointer !important;
+    }
+    div[data-testid="collapsedControl"]:hover {
+        background: rgba(99, 102, 241, 0.3) !important;
+        border-color: #a855f7 !important;
+        box-shadow: 0 8px 24px rgba(168, 85, 247, 0.4) !important;
+        transform: translateY(-1px) scale(1.04);
+    }
+    div[data-testid="collapsedControl"] button {
+        color: #818cf8 !important;
+    }
+    div[data-testid="collapsedControl"] button:hover {
+        color: #ffffff !important;
+    }
+
+    /* ChatGPT-Style Sidebar Container & Close Button (When Expanded) */
+    section[data-testid="stSidebar"] {
+        background-color: #111827 !important;
+        border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
+        box-shadow: 4px 0 24px rgba(0, 0, 0, 0.5) !important;
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s ease !important;
+    }
+
+    button[data-testid="stSidebarCollapseButton"], 
+    section[data-testid="stSidebar"] button[kind="header"] {
+        background: rgba(255, 255, 255, 0.06) !important;
+        border: 1px solid rgba(255, 255, 255, 0.12) !important;
+        border-radius: 8px !important;
+        color: #94a3b8 !important;
+        transition: all 0.2s ease !important;
+    }
+    button[data-testid="stSidebarCollapseButton"]:hover, 
+    section[data-testid="stSidebar"] button[kind="header"]:hover {
+        background: rgba(99, 102, 241, 0.25) !important;
+        color: #ffffff !important;
+        border-color: #6366f1 !important;
     }
 
     /* Dark glassmorphism & accent theme */

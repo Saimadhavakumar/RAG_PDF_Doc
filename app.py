@@ -40,40 +40,59 @@ def get_local_ip():
 # Dark Mode & Modern CSS Styling (Mobile Responsive)
 CUSTOM_CSS = """
 <style>
-    /* Hide unneeded Streamlit header elements while preserving mobile sidebar toggle */
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden; display: none !important;}
-    div[data-testid="stToolbar"] {display: none !important;}
-    div[data-testid="stDecoration"] {display: none !important;}
-    div[data-testid="stStatusWidget"] {display: none !important;}
-    button[title="View code"] {display: none !important;}
-    a[href*="github.com"] {display: none !important;}
+    /* Hide Streamlit Cloud bottom toolbar & "Manage app" log viewer button */
+    #MainMenu {display: none !important; visibility: hidden !important;}
+    footer, .stAppFooter {display: none !important; visibility: hidden !important;}
+    div[data-testid="stToolbar"] {display: none !important; visibility: hidden !important;}
+    div[data-testid="stDecoration"] {display: none !important; visibility: hidden !important;}
+    div[data-testid="stStatusWidget"] {display: none !important; visibility: hidden !important;}
+    [data-testid="manage-app-button"] {display: none !important; visibility: hidden !important;}
+    button[title*="Manage app"], button[title="Manage app"] {display: none !important; visibility: hidden !important;}
+    button[title="View code"] {display: none !important; visibility: hidden !important;}
+    a[href*="github.com"] {display: none !important; visibility: hidden !important;}
+    div[class*="viewerBadge"] {display: none !important; visibility: hidden !important;}
+    div[class*="manageApp"] {display: none !important; visibility: hidden !important;}
+    div[class*="stStatusWidget"] {display: none !important; visibility: hidden !important;}
+    div[class*="styles_viewerBadge"] {display: none !important; visibility: hidden !important;}
+    .viewerBadge_container__1QSob {display: none !important; visibility: hidden !important;}
+    iframe[title="data-testid"] {display: none !important;}
 
-    /* Preserve header container as transparent so mobile sidebar toggle button is visible & clickable */
+    /* Preserve header container as transparent so sidebar toggle button is visible & clickable */
     header[data-testid="stHeader"], div[data-testid="stHeader"] {
         background: transparent !important;
-    }
-    /* ChatGPT-Style Movable Sidebar Toggle (When Collapsed) */
-    div[data-testid="collapsedControl"] {
-        position: fixed !important;
-        top: 14px !important;
-        left: 14px !important;
         z-index: 999999 !important;
-        background: rgba(30, 41, 59, 0.9) !important;
+        display: block !important;
+    }
+
+    /* ChatGPT-Style Movable Sidebar Toggle (When Collapsed) */
+    div[data-testid="collapsedControl"],
+    header button[aria-label*="sidebar" i],
+    header button[data-testid="baseButton-header"],
+    header [data-testid="stSidebarCollapseButton"] {
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        z-index: 999999 !important;
+        background: rgba(30, 41, 59, 0.95) !important;
         backdrop-filter: blur(12px) !important;
         -webkit-backdrop-filter: blur(12px) !important;
-        border: 1px solid rgba(99, 102, 241, 0.4) !important;
-        border-radius: 10px !important;
-        padding: 6px 10px !important;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), 0 0 12px rgba(99, 102, 241, 0.25) !important;
-        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        border: 1px solid rgba(99, 102, 241, 0.5) !important;
+        border-radius: 8px !important;
+        padding: 4px 10px !important;
+        margin: 6px !important;
+        color: #818cf8 !important;
+        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3) !important;
+        transition: all 0.2s ease-in-out !important;
         cursor: pointer !important;
     }
-    div[data-testid="collapsedControl"]:hover {
+    div[data-testid="collapsedControl"]:hover,
+    header button[aria-label*="sidebar" i]:hover,
+    header button[data-testid="baseButton-header"]:hover {
         background: rgba(99, 102, 241, 0.3) !important;
         border-color: #a855f7 !important;
-        box-shadow: 0 8px 24px rgba(168, 85, 247, 0.4) !important;
-        transform: translateY(-1px) scale(1.04);
+        box-shadow: 0 6px 16px rgba(168, 85, 247, 0.4) !important;
+        color: #ffffff !important;
+        transform: scale(1.04) !important;
     }
     div[data-testid="collapsedControl"] button {
         color: #818cf8 !important;
@@ -222,6 +241,9 @@ def highlight_keywords(text: str, query: str) -> str:
 # Header Section
 st.markdown('<div class="main-header">📚 RAG PDF Question Answering System</div>', unsafe_allow_html=True)
 st.markdown('<div class="sub-header">Upload multi-page PDFs, process chunks, generate vector embeddings & query context-bounded answers</div>', unsafe_allow_html=True)
+
+if not st.session_state.indexed:
+    st.info("👈 **Document Upload & System Settings:** Click the **Sidebar Icon ( top-left ☰ / > button )** to open the menu, upload your PDF files, and build the vector database index!")
 
 # Sidebar Configuration Panel
 local_ip = get_local_ip()

@@ -22,20 +22,45 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Dark Mode & Modern CSS Styling
+import socket
+import re
+
+# Helper function to get Host IP for mobile phone connectivity
+def get_local_ip():
+    """Retrieves local IPv4 address of the host for mobile connectivity."""
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        ip = s.getsockname()[0]
+        s.close()
+        return ip
+    except Exception:
+        return "127.0.0.1"
+
+# Dark Mode & Modern CSS Styling (Mobile Responsive)
 CUSTOM_CSS = """
 <style>
-    /* Hide Streamlit Header, Main Menu (Hamburger), GitHub icon, Toolbar, & Footer */
+    /* Hide unneeded Streamlit header elements while preserving mobile sidebar toggle */
     #MainMenu {visibility: hidden;}
-    header {visibility: hidden; display: none !important;}
     footer {visibility: hidden; display: none !important;}
-    .stAppHeader {display: none !important;}
-    div[data-testid="stHeader"] {display: none !important;}
     div[data-testid="stToolbar"] {display: none !important;}
     div[data-testid="stDecoration"] {display: none !important;}
     div[data-testid="stStatusWidget"] {display: none !important;}
     button[title="View code"] {display: none !important;}
     a[href*="github.com"] {display: none !important;}
+
+    /* Preserve header container as transparent so mobile sidebar toggle button is visible & clickable */
+    header[data-testid="stHeader"], div[data-testid="stHeader"] {
+        background: transparent !important;
+    }
+    div[data-testid="collapsedControl"] {
+        background-color: #1e293b !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        border-radius: 8px !important;
+        color: #6366f1 !important;
+        z-index: 999999 !important;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3) !important;
+    }
 
     /* Dark glassmorphism & accent theme */
     .stApp {
@@ -71,6 +96,7 @@ CUSTOM_CSS = """
         border-radius: 6px;
         margin: 0.5rem 0;
         font-size: 0.9rem;
+        word-break: break-word;
     }
     .highlight-keyword {
         background-color: #f59e0b;
@@ -81,6 +107,45 @@ CUSTOM_CSS = """
     }
     .stChatMessage {
         border-radius: 12px;
+    }
+
+    /* Mobile Phone Responsive Adjustments (<768px) */
+    @media screen and (max-width: 768px) {
+        .main-header {
+            font-size: 1.5rem !important;
+            margin-top: 0.5rem;
+        }
+        .sub-header {
+            font-size: 0.88rem !important;
+            margin-bottom: 1rem;
+        }
+        .metric-card {
+            padding: 0.75rem 0.9rem !important;
+            margin-bottom: 0.75rem !important;
+        }
+        .metric-card h2 {
+            font-size: 1.2rem !important;
+        }
+        .metric-card h4 {
+            font-size: 0.8rem !important;
+        }
+        .stButton > button {
+            width: 100% !important;
+            min-height: 44px !important;
+            font-size: 0.95rem !important;
+        }
+        .stTabs [data-baseweb="tab-list"] {
+            gap: 4px !important;
+            overflow-x: auto !important;
+            white-space: nowrap !important;
+        }
+        .stTabs [data-baseweb="tab"] {
+            font-size: 0.85rem !important;
+            padding: 8px 12px !important;
+        }
+        div[data-testid="stHorizontalBlock"] {
+            gap: 0.5rem !important;
+        }
     }
 </style>
 """
@@ -111,16 +176,30 @@ def highlight_keywords(text: str, query: str) -> str:
     return text
 
 
-import re
-
 # Header Section
 st.markdown('<div class="main-header">📚 RAG PDF Question Answering System</div>', unsafe_allow_html=True)
 st.markdown('<div class="sub-header">Upload multi-page PDFs, process chunks, generate vector embeddings & query context-bounded answers</div>', unsafe_allow_html=True)
 
 # Sidebar Configuration Panel
+local_ip = get_local_ip()
 with st.sidebar:
     st.header("⚙️ System Configuration")
     
+    with st.expander("📱 Access on Mobile / Phone", expanded=False):
+        st.markdown(f"""
+        **1. Local Wi-Fi Access:**
+        Connect your phone to the same Wi-Fi network and open:
+        ```text
+        http://{local_ip}:8501
+        ```
+        **2. Internet Access (Cellular / Anywhere):**
+        Run this command in terminal to generate a secure public link:
+        ```bash
+        npx localtunnel --port 8501
+        ```
+        *or* `ngrok http 8501`
+        """)
+        
     st.subheader("1. LLM & Embeddings")
     llm_provider = st.selectbox(
         "Select LLM Provider",

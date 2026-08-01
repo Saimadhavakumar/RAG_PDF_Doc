@@ -1,4 +1,10 @@
 import os
+import sys
+
+# Ensure UTF-8 output encoding for Windows terminal
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
+
 from rag_engine import RAGEngine
 
 def test_pipeline():

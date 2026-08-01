@@ -85,7 +85,9 @@ cp .env.example .env
 ```bash
 streamlit run app.py
 ```
-Open your browser at `http://localhost:8501`.
+- **On Desktop Computer**: Open `http://localhost:8501`.
+- **On Mobile Phone (Same Wi-Fi)**: Open `http://<YOUR_LOCAL_IP>:8501` (e.g. `http://192.168.1.15:8501`). Your local IP is automatically displayed inside the application sidebar under **📱 Access on Mobile / Phone**.
+- **On Mobile Phone (Cellular / Anywhere)**: Run `npx localtunnel --port 8501` or `ngrok http 8501` to generate a public HTTPS URL for remote access.
 
 ---
 
